@@ -20,6 +20,8 @@ from typing import Optional
 
 from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 load_dotenv()
 
@@ -390,6 +392,122 @@ def summarize_namespace(namespace: str = "default") -> str:
         f"{entries_text}\n\n"
         "Please provide a concise summary of the key information above."
     )
+
+
+# ── REST API (for Gradio UI / any HTTP client) ───────────────────────────────
+# These endpoints mirror each MCP tool so the UI can call them over plain HTTP
+# without needing a stateful SSE session.
+# All routes live under /api/* and accept JSON bodies.
+
+def _api_auth(request: Request) -> str | None:
+    """Return error message if auth fails, else None."""
+    if not API_KEY:
+        return None
+    key = (
+        request.headers.get("X-API-Key", "")
+        or request.headers.get("Authorization", "").removeprefix("Bearer ")
+    )
+    if key != API_KEY:
+        return "Invalid API key."
+    return None
+
+
+@mcp.custom_route("/api/set", methods=["POST"])
+async def api_set(request: Request) -> JSONResponse:
+    body = await request.json()
+    if err := _api_auth(request):
+        return JSONResponse({"error": err}, status_code=401)
+    result = set_context(
+        key=body["key"],
+        value=body["value"],
+        namespace=body.get("namespace", "default"),
+        tags=body.get("tags", ""),
+        ttl_seconds=int(body.get("ttl_seconds", 0)),
+    )
+    return JSONResponse({"result": result})
+
+
+@mcp.custom_route("/api/get", methods=["POST"])
+async def api_get(request: Request) -> JSONResponse:
+    body = await request.json()
+    if err := _api_auth(request):
+        return JSONResponse({"error": err}, status_code=401)
+    result = get_context(key=body["key"], namespace=body.get("namespace", "default"))
+    return JSONResponse({"result": result})
+
+
+@mcp.custom_route("/api/list", methods=["POST"])
+async def api_list(request: Request) -> JSONResponse:
+    body = await request.json()
+    if err := _api_auth(request):
+        return JSONResponse({"error": err}, status_code=401)
+    result = list_context(
+        namespace=body.get("namespace", "default"),
+        tag_filter=body.get("tag_filter", ""),
+    )
+    return JSONResponse({"result": result})
+
+
+@mcp.custom_route("/api/delete", methods=["POST"])
+async def api_delete(request: Request) -> JSONResponse:
+    body = await request.json()
+    if err := _api_auth(request):
+        return JSONResponse({"error": err}, status_code=401)
+    result = delete_context(key=body["key"], namespace=body.get("namespace", "default"))
+    return JSONResponse({"result": result})
+
+
+@mcp.custom_route("/api/search", methods=["POST"])
+async def api_search(request: Request) -> JSONResponse:
+    body = await request.json()
+    if err := _api_auth(request):
+        return JSONResponse({"error": err}, status_code=401)
+    result = search_context(query=body["query"], namespace=body.get("namespace", "default"))
+    return JSONResponse({"result": result})
+
+
+@mcp.custom_route("/api/share", methods=["POST"])
+async def api_share(request: Request) -> JSONResponse:
+    body = await request.json()
+    if err := _api_auth(request):
+        return JSONResponse({"error": err}, status_code=401)
+    result = share_context(
+        key=body["key"],
+        source_namespace=body["source_namespace"],
+        target_namespace=body["target_namespace"],
+        new_key=body.get("new_key"),
+    )
+    return JSONResponse({"result": result})
+
+
+@mcp.custom_route("/api/namespaces", methods=["GET"])
+async def api_namespaces(request: Request) -> JSONResponse:
+    if err := _api_auth(request):
+        return JSONResponse({"error": err}, status_code=401)
+    result = list_namespaces()
+    return JSONResponse({"result": result})
+
+
+@mcp.custom_route("/api/clear", methods=["POST"])
+async def api_clear(request: Request) -> JSONResponse:
+    body = await request.json()
+    if err := _api_auth(request):
+        return JSONResponse({"error": err}, status_code=401)
+    result = clear_namespace(namespace=body["namespace"])
+    return JSONResponse({"result": result})
+
+
+@mcp.custom_route("/api/stats", methods=["GET"])
+async def api_stats(request: Request) -> JSONResponse:
+    if err := _api_auth(request):
+        return JSONResponse({"error": err}, status_code=401)
+    result = server_stats()
+    return JSONResponse({"result": result})
+
+
+@mcp.custom_route("/api/health", methods=["GET"])
+async def api_health(request: Request) -> JSONResponse:
+    return JSONResponse({"status": "ok", "transport": TRANSPORT})
 
 
 # ── Entry point ──────────────────────────────────────────────────────────────

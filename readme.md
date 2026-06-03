@@ -15,17 +15,46 @@
 ## Project Structure
 
 ```
-mcp-context-sharing/
+Context Sharing System using MCP/
 ├── src/
+│   ├── client/
+│   │   ├── chat.py                ← Interactive terminal chat
+│   │   ├── commands.py            ← Slash-command dispatcher
+│   │   ├── config.py              ← Client-side settings
+│   │   ├── demo.py                ← Quick demo script
+│   │   └── mcp_helper.py          ← Shared MCP utilities
+│   ├── mcp/
+│   │   ├── auth.py                ← API key auth & rate limiting
+│   │   ├── config.py              ← MCP server configuration
+│   │   ├── database.py            ← SQLite persistence layer
+│   │   ├── logger.py              ← Structured JSON logging
+│   │   ├── resources.py           ← MCP resources & prompts
+│   │   ├── routes.py              ← HTTP routes via MCP
+│   │   ├── server.py              ← MCP server entry point
+│   │   └── tools.py               ← All MCP tools
 │   ├── server/
-│   │   └── context_server.py      ← MCP server (8 tools, SQLite, auth, TTL)
-│   ├── api.py                     ← FastAPI REST API (wraps MCP server)
-│   ├── ui.py                      ← Gradio web UI (calls FastAPI)
-│   ├── chat.py                    ← Interactive terminal chat
-│   └── openai_with_context.py     ← Quick demo script
+│   │   ├── app.py                 ← FastAPI entry point
+│   │   ├── chat_routes.py         ← /chat endpoints + OpenAI
+│   │   ├── config.py              ← Server settings
+│   │   ├── context_routes.py      ← /context/* endpoints
+│   │   ├── mcp_client.py          ← MCP session lifecycle
+│   │   ├── models.py              ← Pydantic request models
+│   │   ├── namespace_routes.py    ← /namespaces/* endpoints
+│   │   └── stats_routes.py        ← /stats endpoint
+│   └── ui/
+│       ├── api_client/
+│       │   ├── chat.py            ← Chat & stats API calls
+│       │   ├── context.py         ← Context & namespace API calls
+│       │   └── http.py            ← Raw HTTP helpers
+│       ├── components/
+│       │   ├── chat_tab.py        ← Chat tab
+│       │   ├── context_tab.py     ← Context Manager tab
+│       │   ├── namespace_tab.py   ← Namespaces tab
+│       │   └── stats_tab.py       ← Stats tab
+│       └── app.py                 ← Gradio UI entry point
 ├── .env                           ← All config goes here
 ├── context_store.db               ← Auto-created SQLite database
-├── mcp_server.log                 ← Auto-created JSON log file
+├── requirements.txt               ← Python dependencies
 └── README.md
 ```
 

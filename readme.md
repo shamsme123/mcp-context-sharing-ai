@@ -1,6 +1,17 @@
 # MCP Context Sharing System
 ### VS Code + OpenAI + FastAPI + Gradio UI
 
+---
+
+## Contributors
+
+**Bhavika** — Developer 
+
+**Shams** — Collaborator
+
+---
+
+
 ## Project Structure
 
 ```

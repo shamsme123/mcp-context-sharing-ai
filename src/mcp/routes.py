@@ -7,7 +7,7 @@ All routes live under /api/*
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
-from mcp.auth import check_request_auth
+from auth import check_request_auth
 
 
 def register_routes(mcp, tools: dict):
@@ -18,7 +18,7 @@ def register_routes(mcp, tools: dict):
 
     @mcp.custom_route("/api/health", methods=["GET"])
     async def api_health(request: Request) -> JSONResponse:
-        from mcp.config import TRANSPORT
+        from mcp.mcp_config import TRANSPORT
         return JSONResponse({"status": "ok", "transport": TRANSPORT})
 
     @mcp.custom_route("/api/set", methods=["POST"])

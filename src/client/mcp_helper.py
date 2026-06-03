@@ -10,7 +10,7 @@ Provides:
 import json
 from mcp import ClientSession, StdioServerParameters
 
-from config import settings
+from client_config import settings
 
 
 SERVER_PARAMS = StdioServerParameters(

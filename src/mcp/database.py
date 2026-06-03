@@ -9,7 +9,7 @@ import time
 from datetime import datetime, timezone
 from typing import Optional
 
-from mcp.config import DB_PATH
+from mcp_config import DB_PATH
 
 
 # ── Connection ────────────────────────────────────────────────────────────────
@@ -56,10 +56,10 @@ def upsert_entry(namespace: str, key: str, value: str,
     """Insert or update a context entry. Returns 'created' or 'updated'."""
     ts = now()
     with get_db() as db:
-        existing = db.execute(
-            "SELECT key FROM context WHERE namespace=? AND key=?", (namespace, key)
-        ).fetchone()
-        if existing:
+        if existing := db.execute(
+            "SELECT key FROM context WHERE namespace=? AND key=?",
+            (namespace, key),
+        ).fetchone():
             db.execute(
                 "UPDATE context SET value=?, tags=?, updated_at=?, expires_at=? "
                 "WHERE namespace=? AND key=?",

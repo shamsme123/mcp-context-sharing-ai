@@ -8,6 +8,8 @@ Exported:
     handle_command(session, cmd, namespace) -> (output: str, namespace: str)
 """
 
+
+import contextlib
 from mcp import ClientSession
 
 from mcp_helper import mcp_call
@@ -49,10 +51,8 @@ async def handle_command(
         ttl  = 0
         if "ttl=" in rest:
             val_part, ttl_part = rest.rsplit("ttl=", 1)
-            try:
+            with contextlib.suppress(ValueError):
                 ttl = int(ttl_part.strip())
-            except ValueError:
-                pass
             value = val_part.strip()
         else:
             value = rest
@@ -71,9 +71,7 @@ async def handle_command(
         return result, namespace
 
     if verb == "/list":
-        tag = ""
-        if len(parts) >= 2 and parts[1].startswith("tag="):
-            tag = parts[1][4:]
+        tag = parts[1][4:] if len(parts) >= 2 and parts[1].startswith("tag=") else ""
         result = await mcp_call(session, "list_context", namespace=namespace, tag_filter=tag)
         return result, namespace
 

@@ -5,7 +5,7 @@ logger.py — Structured JSON logging to file and stderr
 import json
 import logging
 from datetime import datetime, timezone
-from mcp.config import LOG_FILE
+from mcp_config import LOG_FILE
 
 
 class JsonFormatter(logging.Formatter):

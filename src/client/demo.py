@@ -14,7 +14,7 @@ from openai import AsyncOpenAI
 from mcp.client.stdio import stdio_client
 from mcp import ClientSession
 
-from config import settings
+from client_config import settings
 from mcp_helper import SERVER_PARAMS, mcp_call, build_context_block
 
 openai = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)

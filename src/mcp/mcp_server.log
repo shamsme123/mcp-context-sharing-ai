@@ -1,0 +1,19 @@
+{"ts": "2026-06-02T12:16:29.241757+00:00", "level": "INFO", "msg": "{'action': 'startup', 'transport': 'stdio', 'db': 'D:\\\\Context Sharing System using MCP\\\\src\\\\mcp\\\\context.db'}", "logger": "mcp-context"}
+{"ts": "2026-06-02T12:24:04.563678+00:00", "level": "INFO", "msg": "{'action': 'startup', 'transport': 'stdio', 'db': 'D:\\\\Context Sharing System using MCP\\\\src\\\\mcp\\\\context.db'}", "logger": "mcp-context"}
+{"ts": "2026-06-02T12:26:05.387665+00:00", "level": "INFO", "msg": "{'action': 'set_context', 'namespace': ' project-alpha', 'key': 'project_name', 'result': 'created'}", "logger": "mcp-context"}
+{"ts": "2026-06-02T12:26:49.192301+00:00", "level": "INFO", "msg": "{'action': 'set_context', 'namespace': ' project-alpha', 'key': 'team', 'result': 'created'}", "logger": "mcp-context"}
+{"ts": "2026-06-02T12:27:44.552860+00:00", "level": "INFO", "msg": "{'action': 'set_context', 'namespace': ' project-alpha', 'key': 'team', 'result': 'updated'}", "logger": "mcp-context"}
+{"ts": "2026-06-02T12:29:42.188975+00:00", "level": "INFO", "msg": "{'action': 'get_context', 'namespace': ' project-alpha', 'key': 'team'}", "logger": "mcp-context"}
+{"ts": "2026-06-03T04:16:05.081091+00:00", "level": "INFO", "msg": "{'action': 'startup', 'transport': 'stdio', 'db': 'D:\\\\Context Sharing System using MCP\\\\src\\\\mcp\\\\context.db'}", "logger": "mcp-context"}
+{"ts": "2026-06-03T04:16:39.237748+00:00", "level": "INFO", "msg": "{'action': 'startup', 'transport': 'stdio', 'db': 'D:\\\\Context Sharing System using MCP\\\\src\\\\mcp\\\\context.db'}", "logger": "mcp-context"}
+{"ts": "2026-06-03T04:16:45.489729+00:00", "level": "INFO", "msg": "{'action': 'startup', 'transport': 'stdio', 'db': 'D:\\\\Context Sharing System using MCP\\\\src\\\\mcp\\\\context.db'}", "logger": "mcp-context"}
+{"ts": "2026-06-03T04:17:08.072208+00:00", "level": "INFO", "msg": "{'action': 'startup', 'transport': 'stdio', 'db': 'D:\\\\Context Sharing System using MCP\\\\src\\\\mcp\\\\context.db'}", "logger": "mcp-context"}
+{"ts": "2026-06-03T04:17:48.877545+00:00", "level": "INFO", "msg": "{'action': 'startup', 'transport': 'stdio', 'db': 'D:\\\\Context Sharing System using MCP\\\\src\\\\mcp\\\\context.db'}", "logger": "mcp-context"}
+{"ts": "2026-06-03T04:17:49.022806+00:00", "level": "INFO", "msg": "{'action': 'set_context', 'namespace': 'project-alpha', 'key': 'project_goal', 'result': 'created'}", "logger": "mcp-context"}
+{"ts": "2026-06-03T04:17:49.142652+00:00", "level": "INFO", "msg": "{'action': 'set_context', 'namespace': 'project-alpha', 'key': 'tech_stack', 'result': 'created'}", "logger": "mcp-context"}
+{"ts": "2026-06-03T04:17:49.241960+00:00", "level": "INFO", "msg": "{'action': 'set_context', 'namespace': 'project-alpha', 'key': 'team_decision', 'result': 'created'}", "logger": "mcp-context"}
+{"ts": "2026-06-03T04:17:49.373773+00:00", "level": "INFO", "msg": "{'action': 'get_context', 'namespace': 'project-alpha', 'key': 'project_goal'}", "logger": "mcp-context"}
+{"ts": "2026-06-03T04:17:49.422344+00:00", "level": "INFO", "msg": "{'action': 'get_context', 'namespace': 'project-alpha', 'key': 'team_decision'}", "logger": "mcp-context"}
+{"ts": "2026-06-03T04:17:49.483294+00:00", "level": "INFO", "msg": "{'action': 'get_context', 'namespace': 'project-alpha', 'key': 'tech_stack'}", "logger": "mcp-context"}
+{"ts": "2026-06-03T04:20:38.407349+00:00", "level": "INFO", "msg": "{'action': 'startup', 'transport': 'stdio', 'db': 'D:\\\\Context Sharing System using MCP\\\\src\\\\mcp\\\\context.db'}", "logger": "mcp-context"}
+{"ts": "2026-06-03T04:21:11.419137+00:00", "level": "INFO", "msg": "{'action': 'startup', 'transport': 'stdio', 'db': 'D:\\\\Context Sharing System using MCP\\\\src\\\\mcp\\\\context.db'}", "logger": "mcp-context"}

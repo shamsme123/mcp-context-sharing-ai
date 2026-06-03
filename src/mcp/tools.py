@@ -6,15 +6,15 @@ Registered on the FastMCP instance passed in from server.py
 import json
 from typing import Optional
 
-from mcp.config import API_KEY, DEFAULT_TTL, RATE_LIMIT, DB_PATH, TRANSPORT
-from mcp.auth import check_auth, check_rate
-from mcp.database import (
+from mcp_config import API_KEY, DEFAULT_TTL, RATE_LIMIT, DB_PATH, TRANSPORT
+from auth import check_auth, check_rate
+from database import (
     upsert_entry, fetch_entry, remove_entry, fetch_namespace,
     remove_expired_keys, search_entries, copy_entry,
     fetch_all_namespaces, remove_namespace, fetch_stats,
     expires_at, is_expired,
 )
-from mcp.logger import logger
+from logger import logger
 
 
 def register_tools(mcp):
@@ -30,6 +30,10 @@ def register_tools(mcp):
         api_key: str = "",
     ) -> str:
         """Store a value. Optionally set TTL (seconds until expiry, 0=forever)."""
+        # FIX 1: Strip namespace and key to prevent leading/trailing space bugs
+        namespace = namespace.strip()
+        key = key.strip()
+
         if not check_auth(api_key):
             logger.warning({"action": "set_context", "result": "auth_failed", "namespace": namespace, "key": key})
             return "Error: Invalid API key."
@@ -37,8 +41,9 @@ def register_tools(mcp):
             return "Error: Rate limit exceeded. Try again in a minute."
 
         tag_list = [t.strip() for t in tags.split(",") if t.strip()]
-        effective_ttl = ttl_seconds if ttl_seconds > 0 else DEFAULT_TTL
-        exp = expires_at(effective_ttl)
+        # FIX 2: ttl_seconds=0 means "no expiry" — do NOT fall back to DEFAULT_TTL
+        effective_ttl = ttl_seconds if ttl_seconds > 0 else 0
+        exp = expires_at(effective_ttl)  # expires_at(0) returns None → stored forever
         action = upsert_entry(namespace, key, value, tag_list, exp)
 
         logger.info({"action": "set_context", "namespace": namespace, "key": key, "result": action})
@@ -49,6 +54,10 @@ def register_tools(mcp):
     @mcp.tool()
     def get_context(key: str, namespace: str = "default", api_key: str = "") -> str:
         """Retrieve a value by key."""
+        # FIX: Strip to match stored keys correctly
+        namespace = namespace.strip()
+        key = key.strip()
+
         if not check_auth(api_key):
             return "Error: Invalid API key."
         if not check_rate():
@@ -68,6 +77,9 @@ def register_tools(mcp):
     @mcp.tool()
     def list_context(namespace: str = "default", tag_filter: str = "", api_key: str = "") -> str:
         """List all keys in a namespace. Expired entries are auto-removed."""
+        # FIX: Strip namespace so " project-alpha" and "project-alpha" resolve the same
+        namespace = namespace.strip()
+
         if not check_auth(api_key):
             return "Error: Invalid API key."
         if not check_rate():
@@ -103,6 +115,10 @@ def register_tools(mcp):
     @mcp.tool()
     def delete_context(key: str, namespace: str = "default", api_key: str = "") -> str:
         """Delete a context entry."""
+        # FIX: Strip to match stored keys correctly
+        namespace = namespace.strip()
+        key = key.strip()
+
         if not check_auth(api_key):
             return "Error: Invalid API key."
 
@@ -116,6 +132,9 @@ def register_tools(mcp):
     @mcp.tool()
     def search_context(query: str, namespace: str = "default", api_key: str = "") -> str:
         """Full-text search across all values in a namespace."""
+        # FIX: Strip namespace for consistent lookup
+        namespace = namespace.strip()
+
         if not check_auth(api_key):
             return "Error: Invalid API key."
         if not check_rate():
@@ -140,10 +159,15 @@ def register_tools(mcp):
         api_key: str = "",
     ) -> str:
         """Copy a context entry from one namespace to another."""
+        # FIX: Strip all namespace/key inputs
+        source_namespace = source_namespace.strip()
+        target_namespace = target_namespace.strip()
+        key = key.strip()
+
         if not check_auth(api_key):
             return "Error: Invalid API key."
 
-        dest_key = new_key or key
+        dest_key = (new_key.strip() if new_key else None) or key
         row = copy_entry(source_namespace, key, target_namespace, dest_key)
         if row is None:
             return f"Key '{key}' not found in '{source_namespace}'."
@@ -169,6 +193,9 @@ def register_tools(mcp):
     @mcp.tool()
     def clear_namespace(namespace: str, api_key: str = "") -> str:
         """Delete all entries in a namespace."""
+        # FIX: Strip namespace
+        namespace = namespace.strip()
+
         if not check_auth(api_key):
             return "Error: Invalid API key."
 

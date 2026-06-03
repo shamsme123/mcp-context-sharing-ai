@@ -3,7 +3,7 @@ auth.py — API key authentication and rate limiting
 """
 
 import time
-from mcp.config import API_KEY, RATE_LIMIT
+from mcp_config import API_KEY, RATE_LIMIT
 
 # ── Rate limiter ──────────────────────────────────────────────────────────────
 _rate_buckets: dict[str, list[float]] = {}
@@ -23,9 +23,8 @@ def check_rate(client_id: str = "default") -> bool:
 # ── Auth ──────────────────────────────────────────────────────────────────────
 def check_auth(api_key: str = "") -> bool:
     """Return True if auth passes (or auth is disabled)."""
-    if not API_KEY:
-        return True
-    return api_key == API_KEY
+# sourcery api_key == API_KEY if API_KEY else True
+    return api_key == API_KEY if API_KEY else True
 
 
 def check_request_auth(request) -> str | None:
@@ -40,6 +39,4 @@ def check_request_auth(request) -> str | None:
         request.headers.get("X-API-Key", "")
         or request.headers.get("Authorization", "").removeprefix("Bearer ")
     )
-    if key != API_KEY:
-        return "Invalid API key."
-    return None
+    return "Invalid API key." if key != API_KEY else None

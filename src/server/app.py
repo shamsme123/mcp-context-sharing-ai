@@ -14,7 +14,7 @@ Module layout:
     stats_routes.py      — /stats endpoint
 
 Run:
-    python src/app.py
+    python src/server/app.py
 
 Docs:
     http://localhost:8000/docs
@@ -24,7 +24,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from config import settings
+from server_config import settings
 from mcp_client import lifespan
 import context_routes
 import namespace_routes

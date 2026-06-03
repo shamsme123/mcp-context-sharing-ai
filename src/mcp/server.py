@@ -4,15 +4,15 @@ Wires together: config → logger → tools → resources → routes
 """
 
 from mcp.server.fastmcp import FastMCP
-from mcp.config import TRANSPORT, HOST, PORT, DB_PATH
-from mcp.logger import logger
+from mcp_config import TRANSPORT, HOST, PORT, DB_PATH
+from logger import logger
 
 # ── Create MCP instance ───────────────────────────────────────────────────────
 mcp = FastMCP("context-sharing-server")
 
 # ── Register everything ───────────────────────────────────────────────────────
-from mcp.tools import register_tools
-from mcp.resources import register_resources
+from tools import register_tools
+from resources import register_resources
 
 register_tools(mcp)
 register_resources(mcp)

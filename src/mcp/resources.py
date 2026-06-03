@@ -3,7 +3,7 @@ resources.py — MCP Resources and Prompts
 """
 
 import json
-from mcp.database import get_db, is_expired
+from database import get_db, is_expired
 
 
 def register_resources(mcp):

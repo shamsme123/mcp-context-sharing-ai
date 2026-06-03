@@ -9,7 +9,7 @@ import json
 from fastapi import APIRouter
 from openai import AsyncOpenAI
 
-from config import settings
+from server_config import settings
 from mcp_client import mcp_call
 from models import ChatRequest
 
